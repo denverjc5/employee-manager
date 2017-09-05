@@ -1,22 +1,51 @@
 import React, { Component } from 'react';
 
 class EmployeeEditor extends Component {
-  // constructor
+  constructor() {
+    super();
+    employee: null,
+    originalEmployee: null,
+    notModified: true
+  }
 
-  // componentWillReceiveProps
+  componentWillReceiveProps(props) {
+    this.setState({
+      employee: Object.assign({}, props.selected),
+      originalEmployee: props.selected,
+      notModified: true
+    })
+  }
 
-  // handleChange
+  handleChange(prop, value) {
+    (if this.state.notModified) {
+      this.setState({
+        notModified: false
+      })
+    }
 
-  // save
+    save() {
+      this.state.originalEmployee.setName(this.state.employee.name);
+      this.state.originalEmployee.setTitle(this.state.employee.title);
+      this.state.originalEmployee.setPhone(this.state.employee.phone);
+      this.setState({
+        notModified: true
+      })
+      this.props.refreshList();
+    }
 
-  // cancel
-  
+    cancel () {
+      this.setState({
+        employee: Object.assign({}, this.state.originalEmployee),
+        notModified; true
+      })
+    }
+
   render() {
     return (
       <div className="infoCard">
-        { 
+        {
           this.state.employee
-          ? 
+          ?
           <div>
             <span id="employeeID"> ID: { this.state.employee.id } </span>
             <p id="employeeTitle"> { this.state.originalEmployee.name } </p>
@@ -34,7 +63,7 @@ class EmployeeEditor extends Component {
           :
           <p id="noEmployee"> No Employee Selected </p>
         }
-       
+
       </div>
     )
   }

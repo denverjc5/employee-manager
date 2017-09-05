@@ -1,22 +1,60 @@
 import React, { Component } from 'react';
 
 class EmployeeEditor extends Component {
-  // constructor
+    constructor() {
+      super();
+      this.state = {
+      employee: null,
+      originalEmployee: null,
+      notModified: true
+    }
+    this.save = this.save.bind(this);
+    this.cancel = this.cancel.bind(this);
+  }
 
-  // componentWillReceiveProps
+  componentWillReceiveProps(props) {
+    this.setState({
+      employee: Object.assign({}, props.selected),
+      originalEmployee: props.selected,
+      notModified: true
+    })
+  }
 
-  // handleChange
+  handleChange(prop, value) {
+    if (this.state.notModified) {
+      this.setState({
+        notModified: false
+      })
+    }
 
-  // save
+    var employeeCopy = Object.assign({}, this.state.employee);
+    employeeCopy[prop] = value;
+    this.setState({employee: employeeCopy});
+  }
 
-  // cancel
-  
+    save() {
+      this.state.originalEmployee.updateName(this.state.employee.name);
+      this.state.originalEmployee.updateTitle(this.state.employee.title);
+      this.state.originalEmployee.updatePhone(this.state.employee.phone);
+      this.setState({
+        notModified: true
+      })
+      this.props.refreshList();
+    }
+
+    cancel () {
+      this.setState({
+        employee: Object.assign({}, this.state.originalEmployee),
+        notModified: true
+      })
+    }
+
   render() {
     return (
       <div className="infoCard">
-        { 
+        {
           this.state.employee
-          ? 
+          ?
           <div>
             <span id="employeeID"> ID: { this.state.employee.id } </span>
             <p id="employeeTitle"> { this.state.originalEmployee.name } </p>
@@ -34,7 +72,7 @@ class EmployeeEditor extends Component {
           :
           <p id="noEmployee"> No Employee Selected </p>
         }
-       
+
       </div>
     )
   }
